@@ -1,0 +1,35 @@
+/* quick custom link to take ownership of a case as
+ * there is no way to add custom buttons to SF1
+ * ... I think I grabbed most of this from somewhere online
+ * */
+
+
+{!REQUIRESCRIPT("/soap/ajax/9.0/connection.js")} 
+try { 
+    
+    userId = sforce.connection.getUserInfo().userId;
+    caseId = "{!Case.Id}"; 
+    ownerId = "{!Case.OwnerId}" 
+    theCase = new sforce.SObject("TheCase"); 
+    theCase["OwnerId"]=userId; 
+    theCase["Id"]=theCaseId; 
+    try { 	
+	var saveResult = sforce.connection.update([theCase]); 
+	
+	if (!saveResult[0].getBoolean("success"))  { 
+
+	    //Display a message if a validation rule/exception occurs 
+	    alert(saveResult[0].errors.message); 
+	} else { 
+	    // We have successfully updated the record, refresh the page 
+	    document.location.href="/{!theCase.Id}"; 
+	} 
+    } catch(error) { 
+	//Validation rule errors will not be caught in this block 
+	//here we handle any AJAX api exeptions eg. connection failure... 
+
+	alert("There has been an error:\n\n"+error); 
+    } 
+} catch(error) { 
+    alert("There has been an error taking ownership:\n\n" +error); 
+}
