@@ -1,0 +1,39 @@
+/* a: michael murphy
+ * d: quick class to take ownership of a standard sobject
+ *    as SF1 does not support validation rules, and the 
+ *    ajax toolkit is not playing nice
+ * */
+
+public with sharing class TakeOwnershipUtility {
+    private Schema.SObjectType sObjectType;
+
+    public TakeOwnershipUtility(ApexPages.standardController sc) {
+	// get the type of sObject from the visualforce page standardController
+	this.sObjectType = sc.getRecord().getSObjectType();
+    }
+
+    public PageReference takeOwnership() {
+	PageReference r = null;
+	try {
+	    // get id parameter
+	    String objId = ApexPages.currentPage().getParameters().get('Id');
+
+	    // create an object
+	    SObject obj = sObjectType.newSObject(objId);
+        
+	    // change owner
+	    obj.put('OwnerId', UserInfo.getUserId());
+
+	    // dml
+	    update obj;
+
+	    r = new PageReference('/' + objId);
+        
+	} catch (Exception e ) {
+	    ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'There was an error handling your request'));
+
+	}
+	
+	return r;
+    }
+}
