@@ -1,4 +1,4 @@
-<apex:page>
+<apex:page standardController="Case">
 <apex:includeScript value="/soap/ajax/15.0/connection.js"/>
  <script>
  /* quick custom link to take ownership of a case as
@@ -12,7 +12,7 @@ try {
     userId = sforce.connection.getUserInfo().userId;
     caseId = "{!Case.Id}"; 
     ownerId = "{!Case.OwnerId}" 
-    theCase = new sforce.SObject("TheCase"); 
+    theCase = new sforce.SObject("Case"); 
     theCase["OwnerId"]=userId; 
     theCase["Id"]=theCaseId; 
     try {   
@@ -24,7 +24,7 @@ try {
         alert(saveResult[0].errors.message); 
     } else { 
         // We have successfully updated the record, refresh the page 
-        document.location.href="/{!theCase.Id}"; 
+        document.location.href="/{!Case.Id}"; 
     } 
     } catch(error) { 
     //Validation rule errors will not be caught in this block 
