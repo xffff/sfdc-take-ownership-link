@@ -1,5 +1,4 @@
 <apex:page>
-<apex:includeScript value="/soap/ajax/15.0/connection.js"/>
  <script>
  /* quick custom link to take ownership of a case as
  * there is no way to add custom buttons to SF1
@@ -7,6 +6,7 @@
  * */
 
 
+{!REQUIRESCRIPT("/soap/ajax/9.0/connection.js")} 
 try { 
     
     userId = sforce.connection.getUserInfo().userId;
